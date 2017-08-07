@@ -114,6 +114,64 @@ class access {
 
     }
 
+    // Get ID of user via emailToken he received via email's $_GET
+    function getUserID($table, $token) {
+
+        $returnArray =  array();
+
+        // SQL statement
+        $sql = "SELECT id FROM $table WHERE token = '".$token."'";
+        
+        // Lanuch sql statement
+        $result = $this->conn->query($sql);
+
+        // If $result is not empty and storing some content
+        if ($result != null && (mysqli_num_rows($result) >= 1 )) {
+            
+            // Content from $result convert to cassoc array and store in $row
+            $row = $result->fetch_array(MYSQLI_ASSOC);
+
+            if (!empty($row)) {
+                $returnArray = $row;
+            }
+
+        }
+
+        return $returnArray;
+
+    }
+
+    // Change status of emailConfirmation column
+    function emailConfirmationStatus($status, $id) {
+
+        $sql = "UPDATE users SET emailConfirmed=? WHERE id=?";
+        $statement = $this->conn->prepare($sql);
+        
+        if (!$statement) {
+            throw new Expection($statement->error);
+        }
+
+        $statement->bind_param("ii", $status, $id);
+        $returnValue = $statement->execute();
+        return $returnValue;
+
+    }
+
+    // Delete token once email is confirmed
+    function deleteToken($table, $token) {
+
+        $sql = "DELETE FROM $table WHERE token=?";
+        $statement = $this->conn->prepare($sql);
+
+        if (!$statement) {
+            throw new Exception($statement->error);
+        }
+
+        $statement->bind_param("s", $token);
+        $returnValue = $statement->execute();
+        return $returnValue;
+
+    }
 
 }
 

@@ -30,7 +30,7 @@ $user = trim($file["dbuser"]);
 $pass = trim($file["dbpass"]);
 $name = trim($file["dbname"]);
 
-// include access.php to call func from it
+// Include access.php to call func from it
 require ("secure/access.php");
 $access = new access($host, $user, $pass, $name);
 $access->connect();
