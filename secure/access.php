@@ -173,6 +173,31 @@ class access {
 
     }
 
+    // Get full user information
+    public function getUser($username) {
+        // Declare array to store all information we got
+        $returnArray = array();
+        
+        // SQL statement
+        $sql = "SELECT * FROM users WHERE username='".$username."'";
+
+        // Excute / query $sql
+        $result = $this->conn->query($sql);
+
+        // If we got some result
+        if ($result != null && (mysqli_num_rows($result) >= 1)) {
+            $row = $result->fetch_array(MYSQLI_ASSOC);
+        }
+
+        // If assigned to $row. Assign everything $returnArray
+        if (!empty($row)) {
+            $returnArray = $row;
+        }
+
+        return $returnArray;
+
+    }
+
 }
 
 ?>
